@@ -60,11 +60,13 @@ const drawWire = (wireDirections) => {
 const compareLines = (wireOnePoints, wireTwoPoints) => {
   let intersectionPoints = []
   for (let i = 0; i < wireOnePoints.length - 1; i++) {
+    const wireOneEndPointIndex = i + 1
     const wireOnePointOne = wireOnePoints[i]
-    const wireOnePointTwo = wireOnePoints[i + 1]
+    const wireOnePointTwo = wireOnePoints[wireOneEndPointIndex]
     for (let j = 0; j < wireTwoPoints.length - 1; j++) {
+      const wireTwoEndPointIndex = j + 1
       const wireTwoPointOne = wireTwoPoints[j]
-      const wireTwoPointTwo = wireTwoPoints[j + 1]
+      const wireTwoPointTwo = wireTwoPoints[wireTwoEndPointIndex]
       if (wireOnePointOne.yPosition === wireOnePointTwo.yPosition && wireTwoPointOne.yPosition !== wireTwoPointTwo.yPosition) {
         // wire one moves on X, wire two moves on Y => potential for intersection
         // so intersection must occur at wireOnePointOne.yPosition if there is one
@@ -79,13 +81,10 @@ const compareLines = (wireOnePoints, wireTwoPoints) => {
             // we have intersection
             // wire one moves on x axis therefore its y coordinate is the intersection
             // wire two move on y axis therefire its x coordinates is the intersection
-            intersectionPoints.push({
-              xPosition: wireOnePointOne.xPosition,
-              yPosition: wireTwoPointOne.yPosition,
-              wireOneIndex: i + 1,
-              wireTwoIndex: j + 1,
-              wireOneMovementBeyondIntersection: wireTwoPointOne.xPosition - wireOnePointTwo.xPosition,
-              wireTwoMovementBeyonIntersection: wireOnePointOne.yPosition - wireTwoPointTwo.yPosition})
+            const intersectionData = new IntersectionPoint(wireOneEndPointIndex, wireTwoEndPointIndex)
+            intersectionData.wireOneMovementBeyondIntersection = wireTwoPointOne.xPosition - wireOnePointTwo.xPosition
+            intersectionData.wireTwoMovementBeyonIntersection = wireOnePointOne.yPosition - wireTwoPointTwo.yPosition
+            intersectionPoints.push(intersectionData)
           }
         }
       } else if (wireOnePointOne.xPosition === wireOnePointTwo.xPosition && wireTwoPointOne.xPosition !== wireTwoPointTwo.xPosition) {
@@ -103,18 +102,21 @@ const compareLines = (wireOnePoints, wireTwoPoints) => {
             // we have intersection
             // wire one moves on y axis therefore its x coordinate is the intersection point x
             // wire two move on x axis therefire its x coordinates is the intersection
-            intersectionPoints.push({
-              xPosition: wireOnePointOne.xPosition,
-              yPosition: wireTwoPointOne.yPosition,
-              wireOneIndex: i + 1,
-              wireTwoIndex: j + 1,
-              wireOneMovementBeyondIntersection: wireTwoPointOne.yPosition - wireOnePointTwo.yPosition,
-              wireTwoMovementBeyonIntersection: wireOnePointOne.xPosition - wireTwoPointTwo.xPosition
-            })
+            const intersectionData = new IntersectionPoint(wireOneEndPointIndex, wireTwoEndPointIndex)
+            intersectionData.wireOneMovementBeyondIntersection = wireTwoPointOne.yPosition - wireOnePointTwo.yPosition
+            intersectionData.wireTwoMovementBeyonIntersection = wireOnePointOne.xPosition - wireTwoPointTwo.xPosition
+            intersectionPoints.push(intersectionData)
           }
         }
       }
     }
   }
   return intersectionPoints
+}
+
+class IntersectionPoint {
+  constructor (wireOneIndex, wireTwoIndex) {
+    this.wireOneIndex = wireOneIndex
+    this.wireTwoIndex = wireTwoIndex
+  }
 }
