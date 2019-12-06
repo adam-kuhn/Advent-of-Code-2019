@@ -15,11 +15,11 @@ for (let currentNumber = rangeMin; currentNumber < rangeMax; currentNumber++) {
     if (digit === nextDigit) {
       if (!repeatedDigits[digit]) {
         repeatedDigits[digit] = 0
-        for (let i = 0; i < self.length; i++) {
-          if (digit === self[i]) {
+        self.forEach(num => {
+          if (num === digit) {
             repeatedDigits[digit]++
           }
-        }
+        })
       }
     }
   })
