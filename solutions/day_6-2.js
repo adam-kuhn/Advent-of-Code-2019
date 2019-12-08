@@ -7,9 +7,9 @@ fs.readFile('../problem-data/day_6.txt', 'utf-8', (err, contents) => {
   const testData = ['COM)B', 'B)C', 'C)D', 'D)E', 'E)F', 'B)G', 'G)H', 'D)I', 'E)J', 'J)K', 'K)L', 'K)YOU', 'I)SAN']
   const orbits = contents.split('\n')
   const parsedOrbits = orbits.map(orbitPair => parseOrbits(orbitPair))
-  const firstOrbit = parsedOrbits.filter(orbits => orbits.centerBody === 'COM')[0]
-  const bodyYouAreOrbiting = parsedOrbits.filter(orbits => orbits.orbitingBody === 'YOU')[0]
-  const bodySantaIsOrbiting = parsedOrbits.filter(orbits => orbits.orbitingBody === 'SAN')[0]
+  const firstOrbit = parsedOrbits.find(orbits => orbits.centerBody === 'COM')
+  const bodyYouAreOrbiting = parsedOrbits.find(orbits => orbits.orbitingBody === 'YOU')
+  const bodySantaIsOrbiting = parsedOrbits.find(orbits => orbits.orbitingBody === 'SAN')
   const indexOfFirstOrbit = parsedOrbits.indexOf(firstOrbit)
   parsedOrbits.splice(indexOfFirstOrbit, 1) // remove first orbit
 
@@ -56,7 +56,7 @@ function pathFromCommonPlanet (commonPlanet, entirePath) {
 function findCommonPlanet (pathOne, pathTwo) {
   let firstCommonPlanet
   pathOne.some(orbitPair => {
-    const commonPlanet = pathTwo.filter(secondPair => orbitPair.centerBody === secondPair.centerBody)[0]
+    const commonPlanet = pathTwo.find(secondPair => orbitPair.centerBody === secondPair.centerBody)
     firstCommonPlanet = commonPlanet
     return firstCommonPlanet
   })
@@ -78,7 +78,7 @@ function createPathFromEndToCom (mappedOrbits, orbitingBody) {
   let currentOrbitingBody = orbitingBody.centerBody
   let path = [orbitingBody]
   for (let level = positionFromCom - 1; level >= 0; level--) {
-    const planetOnThePath = mappedOrbits[level].filter(orbitPairs => currentOrbitingBody === orbitPairs.orbitingBody)[0]
+    const planetOnThePath = mappedOrbits[level].find(orbitPairs => currentOrbitingBody === orbitPairs.orbitingBody)
     path = [planetOnThePath, ...path]
     currentOrbitingBody = planetOnThePath.centerBody
   }
