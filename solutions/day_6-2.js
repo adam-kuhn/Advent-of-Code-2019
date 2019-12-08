@@ -12,6 +12,9 @@ fs.readFile('../problem-data/day_6.txt', 'utf-8', (err, contents) => {
   const bodySantaIsOrbiting = parsedOrbits.find(orbits => orbits.orbitingBody === 'SAN')
   const indexOfFirstOrbit = parsedOrbits.indexOf(firstOrbit)
   parsedOrbits.splice(indexOfFirstOrbit, 1) // remove first orbit
+  
+  const mappedOrbits = {}
+  let levelFromCom = 0
 
   const removeMappedOrbits = (childOrbits) => {
     childOrbits.forEach(orbit => {
@@ -19,8 +22,6 @@ fs.readFile('../problem-data/day_6.txt', 'utf-8', (err, contents) => {
       parsedOrbits.splice(indexOfOrbit, 1)
     })
   }
-  const mappedOrbits = {}
-  let levelFromCom = 0
   const addPlanetToMap = (orbitingBodies) => {
     levelFromCom++
     mappedOrbits[levelFromCom] = orbitingBodies
