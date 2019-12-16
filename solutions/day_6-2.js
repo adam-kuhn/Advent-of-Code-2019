@@ -55,12 +55,7 @@ function pathFromCommonPlanet (commonPlanet, entirePath) {
   return individualPath
 }
 function findCommonPlanet (pathOne, pathTwo) {
-  let firstCommonPlanet
-  pathOne.some(orbitPair => {
-    const commonPlanet = pathTwo.find(secondPair => orbitPair.centerBody === secondPair.centerBody)
-    firstCommonPlanet = commonPlanet
-    return firstCommonPlanet
-  })
+  const firstCommonPlanet = pathOne.filter(orbitPair => pathTwo.find(secondPair => orbitPair.centerBody === secondPair.centerBody))[0]
   return firstCommonPlanet.centerBody
 }
 
